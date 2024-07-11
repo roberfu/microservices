@@ -1,0 +1,1 @@
+INSERT INTO currency_exchange (_from, _to, multiple, env) VALUES ('USD', 'CLP', '900', '');
