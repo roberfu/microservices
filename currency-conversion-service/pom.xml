@@ -11,7 +11,7 @@
 	</parent>
 	<groupId>cl.springmachine.microservices</groupId>
 	<artifactId>currency-conversion-service</artifactId>
-	<version>0.0.1-SNAPSHOT</version>
+	<version>0.0.1</version>
 	<name>currency-conversion-service</name>
 	<description>Demo project for Spring Boot</description>
 	<url />
@@ -99,6 +99,16 @@
 			<plugin>
 				<groupId>org.springframework.boot</groupId>
 				<artifactId>spring-boot-maven-plugin</artifactId>
+				<configuration>
+					<docker>
+						<host>//./pipe/dockerDesktopLinuxEngine</host>
+					</docker>
+					<image>
+						<name>
+							stringmachine/${project.artifactId}:${project.version}</name>
+					</image>
+					<pullPolicy>IF_NOT_PRESENT</pullPolicy>
+				</configuration>
 			</plugin>
 		</plugins>
 	</build>

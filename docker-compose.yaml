@@ -1,0 +1,66 @@
+version: '3.7'
+
+services:
+  currency-exchange-service:
+    image: stringmachine/currency-exchange-service:0.0.1
+    mem_limit: 700m
+    ports:
+      - "8000:8000"
+    networks:
+      - currency-network
+    depends_on:
+      - eureka-server
+    environment:
+      - "eureka.client.service-url.defaultZone=http://eureka-server:8761/eureka"
+      - "management.zipkin.tracing.endpoint=http://zipkin-server:9411/api/v2/spans"
+    
+  currency-conversion-service:
+    image: stringmachine/currency-conversion-service:0.0.1
+    mem_limit: 700m
+    ports:
+      - "8100:8100"
+    networks:
+      - currency-network
+    depends_on:
+      - eureka-server
+    environment:
+      - "eureka.client.service-url.defaultZone=http://eureka-server:8761/eureka"
+      - "management.zipkin.tracing.endpoint=http://zipkin-server:9411/api/v2/spans"
+  
+  eureka-server:
+    image: stringmachine/eureka-server:0.0.1
+    mem_limit: 700m
+    ports:
+      - "8761:8761"
+    networks:
+      - currency-network
+
+  api-gateway:
+    image: stringmachine/api-gateway:0.0.1
+    mem_limit: 700m
+    ports:
+      - "8765:8765"
+    networks:
+      - currency-network
+    depends_on:
+      - eureka-server
+    environment:
+      - "eureka.client.service-url.defaultZone=http://eureka-server:8761/eureka"
+      - "management.zipkin.tracing.endpoint=http://zipkin-server:9411/api/v2/spans"
+  
+  zipkin-server:
+    image: openzipkin/zipkin:2.23
+    mem_limit: 300m
+    ports:
+      - "9411:9411"
+    networks:
+      - currency-network
+    restart: always
+    environment:
+      - "eureka.client.service-url.defaultZone=http://eureka-server:8761/eureka"
+
+networks:
+  currency-network:
+
+
+  
